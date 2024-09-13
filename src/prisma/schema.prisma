@@ -1,0 +1,80 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Granjas {
+  GranjaID   Int     @id @default(autoincrement())
+  nombre     String
+  direccion  String
+  Galeras    Galeras[]
+}
+
+model Galeras {
+  GaleraID   Int     @id @default(autoincrement())
+  nombre     String
+  capacidad  Int
+  GranjaID   Int
+  Granjas    Granjas @relation(fields: [GranjaID], references: [GranjaID])
+  Gallinas   Gallinas[]
+}
+
+model Gallinas {
+  GallinaID      Int      @id @default(autoincrement())
+  nombre         String
+  GaleraID       Int
+  fechaNacimiento Date
+  fechaLlegada   Date
+  Galeras        Galeras @relation(fields: [GaleraID], references: [GaleraID])
+  HuevosProduccion HuevosProduccion[]
+}
+
+model InventarioHuevos {
+  InventarioID   Int      @id @default(autoincrement())
+  fechaIngreso   Date
+  fechaVenta     Date?
+  cantidadIngreso Int
+  cantidadVenta  Int?
+  existencias    Int
+  HuevosProduccion HuevosProduccion[]
+  VentasHuevos   VentasHuevos[]
+}
+
+model HuevosProduccion {
+  ProduccionID   Int      @id @default(autoincrement())
+  GallinaID      Int
+  fechaProduccion Date
+  cantidad       Int
+  InventarioID   Int
+  Gallinas       Gallinas @relation(fields: [GallinaID], references: [GallinaID])
+  InventarioHuevos InventarioHuevos @relation(fields: [InventarioID], references: [InventarioID])
+}
+
+model VentasHuevos {
+  VentaID        Int      @id @default(autoincrement())
+  fechaVenta     Date
+  cantidad       Int
+  precioVenta    Decimal  @db.Decimal(10, 2)
+  InventarioID   Int
+  InventarioHuevos InventarioHuevos @relation(fields: [InventarioID], references: [InventarioID])
+  VentasClientes VentasClientes[]
+}
+
+model Clientes {
+  ClienteID      Int      @id @default(autoincrement())
+  nombre         String
+  direccion      String
+  VentasClientes VentasClientes[]
+}
+
+model VentasClientes {
+  VentaClienteID Int      @id @default(autoincrement())
+  VentaID        Int
+  ClienteID      Int
+  VentasHuevos   VentasHuevos @relation(fields: [VentaID], references: [VentaID])
+  Clientes       Clientes @relation(fields: [ClienteID], references: [ClienteID])
+}
