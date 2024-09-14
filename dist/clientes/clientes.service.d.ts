@@ -1,8 +1,8 @@
-import { PrismaService } from 'src/prisma/prisma.service';
+import { prismaService } from 'src/prisma/prisma.service';
 import { Cliente } from "@prisma/client";
 export declare class ClienteService {
     private prisma;
-    constructor(prisma: PrismaService);
+    constructor(prisma: prismaService);
     getAllCliente(): Promise<Cliente[]>;
     getClienteByID(ClienteID: number): Promise<Cliente>;
     createCliente(data: Cliente): Promise<Cliente>;

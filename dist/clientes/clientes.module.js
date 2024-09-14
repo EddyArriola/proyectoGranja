@@ -16,7 +16,7 @@ let ClientesModule = class ClientesModule {
 exports.ClientesModule = ClientesModule;
 exports.ClientesModule = ClientesModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule],
+        imports: [prisma_module_1.prismaModule],
         providers: [clientes_service_1.ClienteService],
         controllers: [clientes_controller_1.ClientesController]
     })

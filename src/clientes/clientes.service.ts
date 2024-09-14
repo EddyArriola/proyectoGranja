@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { DtoClientes, UpdateDto } from 'src/dto/clientes.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { prismaService } from 'src/prisma/prisma.service';
 import {Cliente} from "@prisma/client"
 import { promises } from 'dns';
 
 @Injectable()
 export class ClienteService {
-    constructor(private prisma: PrismaService){
+    constructor(private prisma: prismaService){
 
     }
 

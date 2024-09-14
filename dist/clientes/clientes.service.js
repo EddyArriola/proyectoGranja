@@ -49,6 +49,6 @@ let ClienteService = class ClienteService {
 exports.ClienteService = ClienteService;
 exports.ClienteService = ClienteService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.prismaService])
 ], ClienteService);
 //# sourceMappingURL=clientes.service.js.map
