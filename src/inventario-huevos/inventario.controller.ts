@@ -31,7 +31,7 @@ export class InventarioController {
     async delete(@Param('id') id: string){
         try{
             return await this.inventarioService.deleteInventario(Number(id));
-
+            
         }catch(error){
             throw new NotFoundException("el inventario no existe")
         }
