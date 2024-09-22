@@ -6,7 +6,7 @@ import { InventarioController } from './inventario-huevos/inventario.controller'
 import { InventarioService } from './inventario-huevos/inventario.service';
 import { prismaModule } from './prisma/prisma.module';
 import { InventarioHuevosModule } from './inventario-huevos/inventario-huevos.module';
-import { ClientesController } from './clientes/clientes.controller';
+import { ClienteController } from './clientes/clientes.controller';
 import { ClienteService } from './clientes/clientes.service';
 import { ClientesModule } from './clientes/clientes.module';
 
@@ -34,7 +34,7 @@ import { ClientesModule } from './clientes/clientes.module';
     ClientesModule,
 
   ],
-    controllers: [InventarioController, ClientesController],
+    controllers: [InventarioController, ClienteController],
     providers: [InventarioService, ClienteService]
 
 })
