@@ -9,6 +9,7 @@ import { InventarioHuevosModule } from './inventario-huevos/inventario-huevos.mo
 import { ClienteController } from './clientes/clientes.controller';
 import { ClienteService } from './clientes/clientes.service';
 import { ClientesModule } from './clientes/clientes.module';
+import { VentasModule } from './ventas/ventas.module';
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { ClientesModule } from './clientes/clientes.module';
     //Despues de TypeOrmModule se agregaran todos los modulos siguientes.
     ProduccionHuevosModule,
     ClientesModule,
-
+    VentasModule
   ],
     controllers: [InventarioController, ClienteController],
     providers: [InventarioService, ClienteService]
