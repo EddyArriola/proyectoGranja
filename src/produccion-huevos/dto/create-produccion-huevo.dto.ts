@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsDate, IsNotEmpty, isNumber, IsNumber } from 'class-validator';
 export class CreateProduccionHuevoDto {
   @IsNumber()
   @IsNotEmpty()
@@ -9,4 +9,6 @@ export class CreateProduccionHuevoDto {
   Cantidad: number;
   @IsNumber()
   InventarioID: number;
+  @IsNumber()
+  HuevoID: number;
 }
