@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model inventario {
+  InventarioID     Int                @id @default(autoincrement())
+  FechaIngreso     String
+  FechaVenta       String
+  CantidadIngreso  Int
+  CantidadVenta    Int
+  Existencias      Int
+  HuevosProduccion HuevosProduccion[]
+}
+
+model Cliente {
+  ClienteID    Int            @id @default(autoincrement())
+  Nombre       String
+  Direccion    String
+  Apellidos    String?        @db.VarChar(50)
+  Email        String?        @db.VarChar(100)
+  Telefono     Int?
+  VentasHuevos VentasHuevos[]
+}
+
+model DetalleVenta {
+  DetalleID    Int            @id(map: "PK__DetalleV__6E19D6FA8ECBEE7B")
+  HuevoID      Int?
+  cantidad     Int?
+  TipoHuevo    TipoHuevo?     @relation(fields: [HuevoID], references: [HuevoID], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle")
+  VentasHuevos VentasHuevos[]
+}
+
+model Galeras {
+  GaleraID  Int        @id(map: "PK__Galeras__3CECAE2BFB5209A4")
+  Nombre    String?    @db.VarChar(50)
+  Capacidad Int?
+  GranjaID  Int?
+  Gallinas  Gallinas[]
+}
+
+model Gallinas {
+  GallinaID        Int                @id(map: "PK__Gallinas__138FD721FC558EA6")
+  Nombre           String?            @db.VarChar(50)
+  GaleraID         Int?
+  FechaNacimiento  DateTime?          @db.Date
+  FechaLlegada     DateTime?          @db.Date
+  Galeras          Galeras?           @relation(fields: [GaleraID], references: [GaleraID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Gallinas__Galera__68487DD7")
+  HuevosProduccion HuevosProduccion[]
+}
+
+model HuevosProduccion {
+  ProduccionID    Int         @id(map: "PK__HuevosPr__6632E91D020A3911")
+  GallinaID       Int?
+  FechaProduccion DateTime?   @db.Date
+  Cantidad        Int?
+  InventarioId    Int?
+  HuevoID         Int?
+  Gallinas        Gallinas?   @relation(fields: [GallinaID], references: [GallinaID], onDelete: NoAction, onUpdate: NoAction, map: "FK__HuevosPro__Galli__6B24EA82")
+  inventario      inventario? @relation(fields: [InventarioId], references: [InventarioID], onDelete: NoAction, onUpdate: NoAction, map: "FK__HuevosPro__Inven__6C190EBB")
+  TipoHuevo       TipoHuevo?  @relation(fields: [HuevoID], references: [HuevoID], onDelete: NoAction, onUpdate: NoAction, map: "FK_HuevoProduccion")
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61D315D456") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model TipoHuevo {
+  HuevoID          Int                @id(map: "PK__TipoHuev__8FBC5651FB1251DB")
+  Nombre           String?            @db.VarChar(10)
+  Precio           Int?
+  DetalleVenta     DetalleVenta[]
+  HuevosProduccion HuevosProduccion[]
+}
+
+model VentasHuevos {
+  VentaID      Int           @id(map: "PK__VentasHu__5B41514CFD3D3525")
+  FechaVenta   DateTime?     @db.Date
+  Cantidad     Int?
+  PrecioVenta  Decimal?      @db.Decimal(10, 2)
+  ClienteID    Int?
+  DetalleID    Int?
+  Cliente      Cliente?      @relation(fields: [ClienteID], references: [ClienteID], onDelete: NoAction, onUpdate: NoAction, map: "FK__VentasHue__Clien__7A672E12")
+  DetalleVenta DetalleVenta? @relation(fields: [DetalleID], references: [DetalleID], onDelete: NoAction, onUpdate: NoAction, map: "FK_DETALLE_VENTA")
+}
