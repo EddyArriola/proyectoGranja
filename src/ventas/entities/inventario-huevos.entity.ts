@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { VentasHuevos } from './ventas-huevos.entity';
 
 @Entity('InventarioHuevos') // Nombre de la tabla en la base de datos
 export class InventarioHuevos {
@@ -20,7 +19,4 @@ export class InventarioHuevos {
 
   @Column({ type: 'int' })
   Existencias: number;
-
-  @OneToMany(() => VentasHuevos, (ventaHuevos) => ventaHuevos.inventario)
-  ventas: VentasHuevos[];
 }

@@ -10,6 +10,9 @@ import { ClienteController } from './clientes/clientes.controller';
 import { ClienteService } from './clientes/clientes.service';
 import { ClientesModule } from './clientes/clientes.module';
 import { VentasModule } from './ventas/ventas.module';
+import { VentasHuevos } from './ventas/entities/ventas-huevos.entity';
+import { DetalleVenta } from './ventas/entities/Detalle.entity';
+import { Clientes } from './ventas/entities/clientes.entity';
 
 @Module({
   imports: [
@@ -22,7 +25,12 @@ import { VentasModule } from './ventas/ventas.module';
       username: 'sa', // usuario de base de datos
       password: '1vacasincola', // contraseña de base de datos
       database: 'GranjaAvicolaDB', // nombre de la base de datos
-      entities: [ProduccionHuevo], // Aquí se agregaran todas las entidades de base de datos.
+      entities: [
+          ProduccionHuevo, 
+          VentasHuevos,
+          DetalleVenta,
+          Clientes
+      ], // Aquí se agregaran todas las entidades de base de datos.
       logging: false, // se establecio en falso para evitar que devuelva la consulta sql que esta realizando
       synchronize: false, // se establecio en false para evitar que se sobreescriba y afecte la base de datos, ya que ya esta definida
       options: {

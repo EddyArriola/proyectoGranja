@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { VentasHuevos } from './entities/ventas-huevos.entity';
 import { InventarioHuevos } from './entities/inventario-huevos.entity';
 import { Clientes } from './entities/clientes.entity'; // Opcional
-import { VentasClientes } from './entities/ventas-clientes.entity'; // Opcional
 import { VentasService } from './ventas.service';
 import { VentasController } from './ventas.controller';
 
@@ -12,8 +11,7 @@ import { VentasController } from './ventas.controller';
     TypeOrmModule.forFeature([
       VentasHuevos, 
       InventarioHuevos, 
-      Clientes,        // Opcional
-      VentasClientes   // Opcional
+      Clientes,
     ]),
   ],
   providers: [VentasService],
