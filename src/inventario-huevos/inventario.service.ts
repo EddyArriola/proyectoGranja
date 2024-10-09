@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { dtoInventario, updateDto } from 'src/dto/inventario.dto';
 import { prismaService } from 'src/prisma/prisma.service';
 import {inventario} from "@prisma/client"
-import { promises } from 'dns';
 
 @Injectable()
 export class InventarioService {

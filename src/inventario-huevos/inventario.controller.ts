@@ -1,7 +1,5 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, UploadedFiles} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put} from '@nestjs/common';
 import { InventarioService } from './inventario.service';
-import { dtoInventario, updateDto } from 'src/dto/inventario.dto';
-import path from 'path';
 import { inventario } from "@prisma/client";
 
 @Controller('inventario')

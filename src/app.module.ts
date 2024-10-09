@@ -13,6 +13,12 @@ import { VentasModule } from './ventas/ventas.module';
 import { VentasHuevos } from './ventas/entities/ventas-huevos.entity';
 import { DetalleVenta } from './ventas/entities/Detalle.entity';
 import { Clientes } from './ventas/entities/clientes.entity';
+import { GalerasModule } from './galeras/galeras.module';
+import { GalerasService } from './galeras/galeras.service';
+import { GalerasController } from './galeras/galeras.controller';
+import { GallinasModule } from './gallinas/gallinas.module';
+import { GallinasController } from './gallinas/gallinas.controller';
+import { GallinasService } from './gallinas/gallinas.service';
 
 @Module({
   imports: [
@@ -41,10 +47,12 @@ import { Clientes } from './ventas/entities/clientes.entity';
     //Despues de TypeOrmModule se agregaran todos los modulos siguientes.
     ProduccionHuevosModule,
     ClientesModule,
-    VentasModule
+    VentasModule,
+    GalerasModule,
+    GallinasModule,
   ],
-    controllers: [InventarioController, ClienteController],
-    providers: [InventarioService, ClienteService]
+    controllers: [InventarioController, ClienteController, GalerasController, GallinasController],
+    providers: [InventarioService, ClienteService, GalerasService, GallinasService]
 
 })
 export class AppModule {}
