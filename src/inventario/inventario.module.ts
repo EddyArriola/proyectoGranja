@@ -7,6 +7,5 @@ import { prismaModule } from 'src/prisma/prisma.module';
   controllers: [InventarioController],
   providers: [InventarioService],
   imports: [prismaModule]
-
 })
-export class InventarioHuevosModule {}
+export class InventarioModule {}

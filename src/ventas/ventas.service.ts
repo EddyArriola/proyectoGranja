@@ -1,41 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { VentasHuevos } from './entities/ventas-huevos.entity';
-import { CreateVentaDto } from './dto/create-venta.dto';
-import { UpdateVentaDto } from './dto/update-venta.dto';
+import { VentasHuevos } from '@prisma/client';
+import { prismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class VentasService {
-  constructor(
-    @InjectRepository(VentasHuevos)
-    private ventasRepository: Repository<VentasHuevos>,
-  ) {}
 
-  // Crear una nueva venta
-  async create(createVentaDto: CreateVentaDto): Promise<VentasHuevos> {
-    const nuevaVenta = this.ventasRepository.create(createVentaDto);
-    return this.ventasRepository.save(nuevaVenta);
+    
+  constructor(private prisma: prismaService){
   }
 
-  // Obtener todas las ventas
-  async findAll(): Promise<VentasHuevos[]> {
-    return this.ventasRepository.find();
+  async getAllVenta(): Promise<VentasHuevos[]>{
+      return this.prisma.ventasHuevos.findMany();
   }
 
-  // Obtener una venta por su ID
-  async findOne(id: number): Promise<VentasHuevos> {
-    return this.ventasRepository.findOne({ where: { VentaID: id } });
+  async getVentaByID(VentaID: number): Promise<VentasHuevos>{
+      return this.prisma.ventasHuevos.findUnique({
+          where:{
+              VentaID
+          }
+      })
   }
 
-  // Actualizar una venta
-  async update(id: number, updateVentaDto: UpdateVentaDto): Promise<VentasHuevos> {
-    await this.ventasRepository.update(id, updateVentaDto);
-    return this.findOne(id);
+  async createVenta(data: VentasHuevos): Promise<VentasHuevos>{
+      return this.prisma.ventasHuevos.create({
+          data
+      })
   }
 
-  // Eliminar una venta
-  async remove(id: number): Promise<void> {
-    await this.ventasRepository.delete(id);
+
+  async updateVenta(VentaID: number, data: VentasHuevos): Promise<VentasHuevos>{
+      return this.prisma.ventasHuevos.update({
+          where: {
+              VentaID
+          }, data
+      })
   }
+
+  async deleteVenta(VentaID: number): Promise<VentasHuevos> {
+      return this.prisma.ventasHuevos.delete({
+          where: {
+              VentaID
+          }
+      })
+  }
+
+
+
 }

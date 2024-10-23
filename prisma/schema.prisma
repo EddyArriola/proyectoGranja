@@ -7,20 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model inventario {
-  InventarioID     Int                @id @default(autoincrement())
-  FechaIngreso     String
-  FechaVenta       String
-  CantidadIngreso  Int
-  CantidadVenta    Int
-  Existencias      Int
-  HuevosProduccion HuevosProduccion[]
-}
-
 model Cliente {
-  ClienteID    Int            @id @default(autoincrement())
-  Nombre       String
-  Direccion    String
+  ClienteID    Int            @id(map: "PK__Cliente__71ABD0A737256C23") @default(autoincrement())
+  Nombre       String?        @db.VarChar(50)
+  Direccion    String?        @db.VarChar(100)
   Apellidos    String?        @db.VarChar(50)
   Email        String?        @db.VarChar(100)
   Telefono     Int?
@@ -28,7 +18,7 @@ model Cliente {
 }
 
 model DetalleVenta {
-  DetalleID    Int            @id(map: "PK__DetalleV__6E19D6FA8ECBEE7B")
+  DetalleID    Int            @id(map: "PK__DetalleV__6E19D6FAB041C259") @default(autoincrement())
   HuevoID      Int?
   cantidad     Int?
   TipoHuevo    TipoHuevo?     @relation(fields: [HuevoID], references: [HuevoID], onDelete: NoAction, onUpdate: NoAction, map: "fk_detalle")
@@ -36,60 +26,57 @@ model DetalleVenta {
 }
 
 model Galeras {
-  GaleraID  Int        @id(map: "PK__Galeras__3CECAE2BFB5209A4")
-  Nombre    String?    @db.VarChar(50)
-  Capacidad Int?
-  GranjaID  Int?
-  Gallinas  Gallinas[]
+  GaleraID         Int                @id(map: "PK__Galeras__3CECAE2B272AAF87") @default(autoincrement())
+  Nombre           String?            @db.VarChar(50)
+  Capacidad        Int?
+  Cantidad         Int?
+  Gallinas         Gallinas[]
+  HuevosProduccion HuevosProduccion[]
 }
 
 model Gallinas {
-  GallinaID        Int                @id(map: "PK__Gallinas__138FD721FC558EA6")
-  Nombre           String?            @db.VarChar(50)
-  GaleraID         Int?
-  FechaNacimiento  DateTime?          @db.Date
-  FechaLlegada     DateTime?          @db.Date
-  Galeras          Galeras?           @relation(fields: [GaleraID], references: [GaleraID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Gallinas__Galera__68487DD7")
-  HuevosProduccion HuevosProduccion[]
+  GallinaID       Int       @id(map: "PK__Gallinas__138FD721CF57970E") @default(autoincrement())
+  Nombre          String?   @db.VarChar(50)
+  GaleraID        Int?
+  FechaNacimiento DateTime? @db.Date
+  FechaLlegada    DateTime? @db.Date
+  Galeras         Galeras?  @relation(fields: [GaleraID], references: [GaleraID], onDelete: NoAction, onUpdate: NoAction, map: "FK__Gallinas__Galera__68487DD7")
 }
 
 model HuevosProduccion {
-  ProduccionID    Int         @id(map: "PK__HuevosPr__6632E91D020A3911")
-  GallinaID       Int?
+  ProduccionID    Int         @id(map: "PK__HuevosPr__6632E91D34E852BE") @default(autoincrement())
+  GaleraID        Int?
+  InventarioID    Int?
   FechaProduccion DateTime?   @db.Date
   Cantidad        Int?
-  InventarioId    Int?
-  HuevoID         Int?
-  Gallinas        Gallinas?   @relation(fields: [GallinaID], references: [GallinaID], onDelete: NoAction, onUpdate: NoAction, map: "FK__HuevosPro__Galli__6B24EA82")
-  inventario      inventario? @relation(fields: [InventarioId], references: [InventarioID], onDelete: NoAction, onUpdate: NoAction, map: "FK__HuevosPro__Inven__6C190EBB")
-  TipoHuevo       TipoHuevo?  @relation(fields: [HuevoID], references: [HuevoID], onDelete: NoAction, onUpdate: NoAction, map: "FK_HuevoProduccion")
-}
-
-model sysdiagrams {
-  name         String @db.NVarChar(128)
-  principal_id Int
-  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B61D315D456") @default(autoincrement())
-  version      Int?
-  definition   Bytes?
-
-  @@unique([principal_id, name], map: "UK_principal_name")
+  Galeras         Galeras?    @relation(fields: [GaleraID], references: [GaleraID], onDelete: NoAction, onUpdate: NoAction, map: "FK_ProduccionGalera")
+  Inventario      Inventario? @relation(fields: [InventarioID], references: [InventarioID], onDelete: NoAction, onUpdate: NoAction, map: "FK_ProduccionInventario")
 }
 
 model TipoHuevo {
-  HuevoID          Int                @id(map: "PK__TipoHuev__8FBC5651FB1251DB")
-  Nombre           String?            @db.VarChar(10)
-  Precio           Int?
-  DetalleVenta     DetalleVenta[]
-  HuevosProduccion HuevosProduccion[]
+  HuevoID      Int            @id(map: "PK__TipoHuev__8FBC56517A374326") @default(autoincrement())
+  Nombre       String?        @db.VarChar(10)
+  Precio       Decimal?       @db.Decimal(10, 2)
+  Descripcion  String?        @db.VarChar(50)
+  DetalleVenta DetalleVenta[]
+  Inventario   Inventario[]
 }
 
 model VentasHuevos {
-  VentaID      Int           @id(map: "PK__VentasHu__5B41514CFD3D3525")
+  VentaID      Int           @id(map: "PK__VentasHu__5B41514C2962FB08") @default(autoincrement())
   FechaVenta   DateTime?     @db.Date
-  Cantidad     Int?
-  PrecioVenta  Decimal?      @db.Decimal(10, 2)
+  TotalVenta   Float?
   ClienteID    Int?
   DetalleID    Int?
   Cliente      Cliente?      @relation(fields: [ClienteID], references: [ClienteID], onDelete: NoAction, onUpdate: NoAction, map: "FK__VentasHue__Clien__7A672E12")
   DetalleVenta DetalleVenta? @relation(fields: [DetalleID], references: [DetalleID], onDelete: NoAction, onUpdate: NoAction, map: "FK_DETALLE_VENTA")
+}
+
+model Inventario {
+  InventarioID     Int                @id(map: "PK__Inventar__FB8A24B7349993C8") @default(autoincrement())
+  Nombre           String?            @db.VarChar(50)
+  HuevoID          Int?
+  Existencias      Int?
+  HuevosProduccion HuevosProduccion[]
+  TipoHuevo        TipoHuevo?         @relation(fields: [HuevoID], references: [HuevoID], onDelete: NoAction, onUpdate: NoAction, map: "FK_InventarioTipo")
 }

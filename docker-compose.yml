@@ -1,0 +1,31 @@
+#version: '3.8'
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: '1vacasincola'
+      ACCEPT_EULA: 'Y'
+    ports:
+      - '1433:1433'
+    networks:
+      - app-network
+    volumes:
+      - mssql-data:/var/opt/mssql
+
+  backend:
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "sqlserver://LAPTOP-UE9FR5EG;user=sa;password=1vacasincola;database=GranjaAvicolaDB;encrypt=true;trustServerCertificate=true"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mssql-data:

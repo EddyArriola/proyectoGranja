@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { prismaService } from 'src/prisma/prisma.service';
-import {inventario} from "@prisma/client"
+import {Inventario} from '@prisma/client'
 
 @Injectable()
 export class InventarioService {
@@ -8,36 +8,34 @@ export class InventarioService {
 
     }
 
-    async getAllInventario(): Promise<inventario[]>{
+    async getAllInventario(): Promise<Inventario[]>{
         return this.prisma.inventario.findMany();
     }
 
-    async getInventarioByID(InventarioID: number): Promise<inventario>{
+    async getInventarioByID(InventarioID: number): Promise<Inventario>{
         return this.prisma.inventario.findUnique({
             where:{
                 InventarioID
-
             }
         })
     }
 
-    async createInventario(data: inventario): Promise<inventario>{
+    async createInventario(data: Inventario): Promise<Inventario>{
         return this.prisma.inventario.create({
             data
         })
     }
 
-    
-    async updateInventario(InventarioID: number, data: inventario): Promise<inventario>{
+
+    async updateInventario(InventarioID: number, data: Inventario): Promise<Inventario>{
         return this.prisma.inventario.update({
             where: {
                 InventarioID
             }, data
-
         })
     }
 
-    async deleteInventario(InventarioID: number): Promise<inventario> {
+    async deleteInventario(InventarioID: number): Promise<Inventario> {
         return this.prisma.inventario.delete({
             where: {
                 InventarioID
@@ -45,4 +43,3 @@ export class InventarioService {
         })
     }
 }
- 

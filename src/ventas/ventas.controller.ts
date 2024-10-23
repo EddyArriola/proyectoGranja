@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, Put } from '@nestjs/common';
 import { VentasService } from './ventas.service';
-import { CreateVentaDto } from './dto/create-venta.dto';
-import { UpdateVentaDto } from './dto/update-venta.dto';
+import { VentasHuevos } from '@prisma/client';
 
 @Controller('ventas')
 export class VentasController {
-  constructor(private readonly ventasService: VentasService) {}
-
-  @Post()
-  create(@Body() createVentaDto: CreateVentaDto) {
-    return this.ventasService.create(createVentaDto);
-  }
+  
+  constructor(private readonly VentasService: VentasService) {}
 
   @Get()
-  findAll() {
-    return this.ventasService.findAll();
+  async GetAll(){
+      return this.VentasService.getAllVenta();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ventasService.findOne(+id);
+  async GetById(@Param('id') id: string){
+      const VentasServiceFound = await this.VentasService.getVentaByID(Number(id));
+      if(!VentasServiceFound) throw new NotFoundException('la venta no existe')
+          return VentasServiceFound;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVentaDto: UpdateVentaDto) {
-    return this.ventasService.update(+id, updateVentaDto);
+  @Post()
+  async create(@Body() data: VentasHuevos){
+      return this.VentasService.createVenta(data);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ventasService.remove(+id);
+  async delete(@Param('id') id: string){
+      try{
+          return await this.VentasService.deleteVenta(Number(id));
+          
+      }catch(error){
+          throw new NotFoundException("la venta no existe")
+      }
   }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() data: VentasHuevos) {
+      try {
+          return await this.VentasService.updateVenta(Number(id), data); 
+      } catch (error) {
+          throw new NotFoundException("la venta no existe")
+      }
+  }
+
+
 }

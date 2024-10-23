@@ -1,7 +1,5 @@
-import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Patch, Post, Put, UploadedFiles} from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put} from '@nestjs/common';
 import { ClienteService } from './clientes.service';
-import { DtoClientes, UpdateDto } from 'src/dto/clientes.dto';
-import path from 'path';
 import { Cliente} from "@prisma/client";
 
 @Controller('cliente')
@@ -9,7 +7,7 @@ export class ClienteController {
 
     constructor(private readonly clienteService: ClienteService){
     }
-     
+    
     @Get()
     async GetAllCliente(){
         return this.clienteService.getAllCliente();
